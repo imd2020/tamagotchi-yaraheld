@@ -171,8 +171,12 @@ function mouseClicked() {
   } else if (cutting.hitTest()) {
     gameState = "victory";
   } else if (playagain.hitTest()) {
+    n = 0;
+    opacity = 200;
     gameState = "start";
   } else if (tryagain.hitTest()) {
+    n = 0;
+    opacity = 200;
     gameState = "start";
   }
   if (watering.hitTest()) {
