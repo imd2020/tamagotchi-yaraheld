@@ -1,14 +1,9 @@
 window.mouseClicked = mouseClicked;
 window.draw = draw;
-// window.startScreen = startScreen;
-// window.gameScreen = gameScreen;
-// window.deathScreen = deathScreen;
-// window.victoryScreen = victoryScreen;
 
 import Flowerpot from "./Flowerpot.js";
 import Emotion from "./Emotions.js";
 import Button from "./Buttonraw.js";
-// import State from "./States";
 import Stage from "./Leaf.js";
 import {
   starttitle,
@@ -34,13 +29,20 @@ let counter = 0;
 let r = 0;
 let g = 0;
 let b = 0;
-let n = 0; //leafstates level ++
+let leafstate = 0; //leafstates level ++
 let m = 0; //emotions level ++
 let timer = 0;
 let deathtimer = 0;
 let opacity = 200;
+let textposoverwatering = { x: 450, y: 490 };
+let titlepos = { x: 65, y: -200 };
 
 function startScreen() {
+  gsap.to(titlepos, {
+    duration: 2,
+    ease: "power1.out",
+    y: 190,
+  });
   pot.display();
   emotion.i = 1;
   emotion.displaysad(express);
@@ -48,29 +50,28 @@ function startScreen() {
   startScreenleaf.levelDisplay(leaf);
   startgame.display();
   startgame.hitTest();
-  image(starttitle, 65, 190, 460, 155);
+  image(starttitle, titlepos.x, titlepos.y, 460, 155);
 }
 function gameScreen() {
   pot.display();
   fill(255);
   textSize(22);
   textFont("duper");
-  text("     try to water the plant \nwith just the right amount ", 190, 60);
+  text("     try to water the plant \nwith just the right amount ", 190, 50);
   image(can, 458, 195, 80, 60);
   image(scissors, 468, 310, 95, 75);
   watering.display();
-  watering.hitTest();
   cutting.display();
   emotion.i = m;
   emotion.displaysad(express);
-  level.l = n;
+  level.l = leafstate;
   level.levelDisplay(leaf);
-
+  if (leafstate === 11) {
+    fill(0, 0, 0, 200);
+    rect(450, 180, 100, 100, 10);
+  }
   fill(0, 0, 0, opacity);
   rect(450, 300, 100, 100, 10);
-  if (opacity === 0) {
-    cutting.hitTest();
-  }
 }
 function deathScreen() {
   pot.display();
@@ -82,7 +83,6 @@ function deathScreen() {
   emotion.i = 3; //greift auf das i in der class zu
   emotion.displaysad(express);
   tryagain.display();
-  tryagain.hitTest();
 }
 function victoryScreen() {
   fill(255);
@@ -104,7 +104,6 @@ function victoryScreen() {
   image(leaf[6], -30, 120, 400, 550);
   image(leaf[2], 245, 52, 350, 460);
   playagain.display();
-  playagain.hitTest();
 }
 function moistureMeter() {
   counter -= 5 / 30;
@@ -132,7 +131,11 @@ function moistureMeter() {
     deathtimer += 1 / 30; // länger als 30 sekunden = death
     fill(255);
     textSize(12);
-    text("please stop!\n you are drowning \n our little friend ", 450, 490);
+    text(
+      "please stop!\n you are drowning \n our little friend ",
+      textposoverwatering.x,
+      textposoverwatering.y
+    );
   } else if (counter > 500) {
     r = 70;
     g = 150;
@@ -145,7 +148,7 @@ function moistureMeter() {
 }
 function levelUpOrDeath() {
   if (counter > 200 && counter <= 300 && timer >= 5) {
-    n += 1;
+    leafstate += 1;
     counter = 0;
     timer = 0;
     deathtimer = 0;
@@ -158,29 +161,39 @@ function levelUpOrDeath() {
     r = 0;
     g = 0;
     b = 0;
-    n = 0; //leafstates level ++
+    leafstate = 0; //leafstates level ++
     m = 0;
   }
-  if (n === 11) {
-    opacity = 0;
+  if (leafstate === 11) {
+    opacity = 20;
+    cutting.hitTest = false;
   }
+}
+function textBounce() {
+  gsap.to(textposoverwatering, {
+    duration: 0.5,
+    ease: "bounce",
+    y: 500,
+  });
 }
 function mouseClicked() {
   if (startgame.hitTest()) {
     gameState = "game";
-  } else if (cutting.hitTest()) {
+  } else if (leafstate === 11 && cutting.hitTest()) {
     gameState = "victory";
   } else if (playagain.hitTest()) {
-    n = 0;
+    leafstate = 0;
     opacity = 200;
     gameState = "start";
   } else if (tryagain.hitTest()) {
-    n = 0;
+    leafstate = 0;
     opacity = 200;
     gameState = "start";
   }
-  if (watering.hitTest()) {
+  if (leafstate <= 11 && watering.hitTest()) {
     counter = counter + 20;
+    textBounce();
+    textposoverwatering.y = 490;
     // console.log(counter);
   }
 }
