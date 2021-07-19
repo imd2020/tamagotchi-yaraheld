@@ -166,7 +166,7 @@ function levelUpOrDeath() {
   }
   if (leafstate === 11) {
     opacity = 20;
-    cutting.hitTest = false;
+    watering.hitTest = false;
   }
 }
 function textBounce() {
