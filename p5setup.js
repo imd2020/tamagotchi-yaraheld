@@ -20,10 +20,10 @@ function preload() {
   tombstone = loadImage("./font/RIP.png");
   can = loadImage("equipment/Item1.png");
   scissors = loadImage("equipment/Item2.png");
-  express[0] = loadImage("emotions/Emotion1.png");
-  express[1] = loadImage("emotions/Emotion2.png");
-  express[2] = loadImage("emotions/Emotion3.png");
-  express[3] = loadImage("emotions/Emotion4.png");
+  express[0] = loadImage("emotions/emotion1.png");
+  express[1] = loadImage("emotions/emotion2.png");
+  express[2] = loadImage("emotions/emotion3.png");
+  express[3] = loadImage("emotions/emotion4.png");
   leaf[0] = loadImage("levels/stage0.png");
   leaf[1] = loadImage("levels/stage1.png");
   leaf[2] = loadImage("levels/stage2.png");
